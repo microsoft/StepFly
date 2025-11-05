@@ -1,0 +1,56 @@
+{
+  "llm": {
+    "api_base": "",
+    "api_key": "",
+    "model": "gpt-4o"
+  },
+  "memory_database": {
+    "reset_on_start": true,
+    "host": "localhost",
+    "port": 27017
+  },
+  "tools": {
+    "enable_plugins": true,
+    "tsg_loader": {
+      "show_full_plugin_content": true,
+      "tsg_base_path": "./TSGs",
+      "plandag_base_path": "./TSGs/PlanDAGs"
+    },
+    "code_interpreter": {
+      "allowed_modules": [
+        "pandas",
+        "numpy",
+        "datetime",
+        "re",
+        "json",
+        "math",
+        "statistics",
+        "collections",
+        "itertools",
+        "sqlite3"
+      ],
+      "max_attempts": 3
+    }
+  },
+  "scheduler": {
+    "allowed_tools": [
+      "user_interaction",
+      "incident_tsg_loader",
+      "schedule_tool"
+    ],
+    "max_executor_number": 3
+  },
+  "executor": {
+    "only_dependent_node_context": false,
+    "only_result_context": false,
+    "ordered_step_context": true,
+    "max_iterations": 30,
+    "allowed_tools": [
+      "code_interpreter",
+      "finish_step",
+      "log_reasoning_tool",
+      "sql_query_tool"
+    ]
+  },
+  "max_steps": 50
+} 

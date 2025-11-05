@@ -1,0 +1,125 @@
+Incident ID: DIST_SYS_2024_001
+Title: Critical API Gateway Availability Drop - Multiple Regions Affected
+Severity: Critical (Sev 1)
+Status: Active
+Created: 2024-01-20T08:30:00Z
+Reporter: Emma Thompson (emma.thompson@company.com)
+Team: Platform Engineering & Site Reliability
+Escalation: Level 2 - VP Engineering notified
+
+## Problem Description
+The production API gateway infrastructure is experiencing a significant availability drop across multiple regions. The overall system availability has fallen to 96.2%, well below our 99.9% SLA. Initial symptoms include increased error rates, elevated latencies, and intermittent service unavailability affecting various customer segments.
+
+## Impact Assessment
+- Affected Services: Main API Gateway serving all customer-facing applications
+- User Impact: Approximately 35% of users experiencing degraded service
+- Business Impact:
+  - Transaction success rate: 92% (down from 99.8%)
+  - Customer complaints: 1,200+ in the last hour
+  - Revenue impact: Estimated $75,000/hour in lost transactions
+  - Premium tier customers affected: 450+ accounts
+- SLA Status: Breached for Premium tier (99.9% requirement)
+
+## Timeline
+- 06:00: New service version 3.14.2 deployed to production
+- 06:30: Feature flag "enhanced_routing_v2" enabled for 50% traffic
+- 07:00: Minor increase in error rates observed (ignored as within threshold)
+- 07:30: Customer complaints start arriving about intermittent failures
+- 08:00: Error rate spike detected by monitoring
+- 08:15: Incident declared
+- 08:30: War room activated, initial investigation started
+- Current: Multiple teams investigating, root cause unknown
+
+## Environment Details
+- Service: api.gateway.main
+- Version: 3.14.2 (previously 3.14.1)
+- Environment: prod
+- Regions Affected: us-east, us-west, eu-central (all production regions)
+- Infrastructure:
+  - Load Balancers: 12 instances across regions
+  - API Gateway Nodes: 48 instances
+  - Database: Distributed PostgreSQL cluster
+  - Cache: Redis cluster (6 nodes per region)
+
+## Current System Metrics
+
+### Service Level Indicators
+- Overall Availability: 96.2% (last hour)
+- Error Rate: 3.8% (baseline: 0.2%)
+- P95 Latency: 2,800ms (baseline: 450ms)
+- P99 Latency: 8,500ms (baseline: 1,200ms)
+- Request Volume: 185,000 RPM (normal)
+
+### Regional Breakdown
+- us-east: 95.8% availability, 4.2% errors
+- us-west: 96.5% availability, 3.5% errors
+- eu-central: 96.3% availability, 3.7% errors
+
+### Error Distribution
+- 5xx errors: 65% of failures
+- 429 (rate limiting): 20% of failures
+- 503 (service unavailable): 10% of failures
+- Other: 5% of failures
+
+## Initial Observations
+- No obvious infrastructure failures detected
+- CPU and memory utilization within normal ranges (65-75%)
+- Database connections stable
+- Network connectivity normal
+- No recent configuration changes besides deployment
+- Feature flag "enhanced_routing_v2" showing mixed results
+
+## Attempted Mitigations
+- ✅ Increased logging verbosity
+- ⚠️ Considered rollback but metrics inconclusive
+- ⚠️ Feature flag adjustment considered but impact unclear
+- ❌ Cache clear attempted - no improvement
+- ⚠️ Horizontal scaling initiated but not yet complete
+
+## Parameters for Analysis
+- region: us-east (primary investigation focus)
+- service_name: api.gateway.main
+- environment: prod
+- start_time: 2024-01-20T06:30:00Z
+- end_time: 2024-01-20T08:30:00Z
+- threshold: 99.9
+
+## Investigation Requirements
+1. Determine if new version caused regression
+2. Analyze feature flag impact
+3. Check regional variations
+4. Investigate partition/shard health
+5. Review application component performance
+6. Assess customer segment impact
+7. **Critical: Analyze business workflow completion rates**
+8. Identify error patterns and root causes
+
+## Stakeholders
+- Technical: CTO, VP Engineering, Platform Team, SRE Team
+- Business: VP Product, Customer Success, Support Team
+- External: Premium tier customers with SLA agreements
+
+## Success Criteria
+- Restore availability to >99.9%
+- Error rate below 0.5%
+- P95 latency under 500ms
+- All business-critical workflows functional
+- Root cause identified and mitigated
+
+## Notes
+- Previous similar incident 3 months ago was due to database connection pool exhaustion
+- Recent architecture changes include new routing algorithm in v3.14.x
+- Customer reports suggest specific workflows are failing more than others
+- **Important**: Check payment processing and checkout workflows specifically
+- Some feature flags were recently introduced for A/B testing
+
+## Hidden Context (for demo purposes)
+The actual root cause is a critical business workflow failure introduced by a combination of:
+1. The new version has a subtle bug in handling multi-step workflows
+2. The feature flag "enhanced_routing_v2" exacerbates the issue
+3. The problem only manifests in specific business scenarios (payment processing)
+4. This will only be discovered in Step 9 (Scenario/Workflow Analysis)
+5. Steps 2-8 will show various symptoms but not the root cause
+6. The workflow "payment_processing" has a 45% failure rate
+7. The bottleneck is in the "payment_authorization" step
+8. High-value transactions are disproportionately affected

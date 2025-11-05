@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StepFly Dashboard - Real-time Visualization</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+    <!-- Header with status information -->
+    <header class="header">
+        <div class="header-content">
+            <h1>StepFly Dashboard</h1>
+            <div class="status-info">
+                <button class="start-session-btn" id="startSessionBtn" onclick="startNewSession()">🚀 Start New Session</button>
+                <span class="session-id">Session: <span id="sessionId">Not Started</span></span>
+                <span class="connection-status" id="connectionStatus">
+                    <span class="status-dot"></span> Connected
+                </span>
+                <span class="last-update">Last Update: <span id="lastUpdate">--:--:--</span></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Statistics Bar -->
+    <div class="statistics-bar">
+        <div class="stat-item">
+            <span class="stat-label">Total Nodes:</span>
+            <span class="stat-value" id="totalNodes">0</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">Pending:</span>
+            <span class="stat-value pending" id="pendingNodes">0</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">Running:</span>
+            <span class="stat-value running" id="runningNodes">0</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">Finished:</span>
+            <span class="stat-value finished" id="finishedNodes">0</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">Failed:</span>
+            <span class="stat-value failed" id="failedNodes">0</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">Skipped:</span>
+            <span class="stat-value skipped" id="skippedNodes">0</span>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-container">
+        <!-- Scheduler Conversation Sidebar (Left) -->
+        <div class="scheduler-sidebar" id="schedulerSidebar">
+            <div class="scheduler-header">
+                <h2>🤖 Scheduler Console</h2>
+                <button class="minimize-btn" onclick="toggleSchedulerSidebar()" title="Collapse">⟨</button>
+            </div>
+            
+            <!-- Scheduler Conversation -->
+            <div class="scheduler-conversation" id="schedulerConversation">
+                <div class="initial-message">
+                    Click "Start New Session" to begin TSG troubleshooting.
+                </div>
+            </div>
+            
+            <!-- User Input Section -->
+            <div class="user-input-section" id="userInputSection" style="display: none;">
+                <div class="input-prompt" id="inputPrompt">Waiting for prompt...</div>
+                <div class="input-container">
+                    <input type="text" id="userInputField" placeholder="Enter your response..." onkeypress="handleUserInputKeypress(event)">
+                    <button onclick="sendUserInput()">Send</button>
+                </div>
+            </div>
+        </div>
+        <!-- Graph Container -->
+        <div class="graph-container" id="graphContainer">
+            <div class="graph-controls">
+                <button onclick="zoomIn()">Zoom In (+)</button>
+                <button onclick="zoomOut()">Zoom Out (-)</button>
+                <button onclick="resetZoom()">Reset View</button>
+                <button onclick="clearSavedPosition()" title="Clear saved position">Clear Saved</button>
+                <button onclick="toggleAutoUpdate()" id="autoUpdateBtn">Pause Updates</button>
+                <select id="refreshRate" onchange="updateRefreshRate()">
+                    <option value="500">0.5s Refresh</option>
+                    <option value="1000" selected>1s Refresh</option>
+                    <option value="2000">2s Refresh</option>
+                    <option value="5000">5s Refresh</option>
+                </select>
+                <span style="margin-left: 1rem; font-size: 0.9rem; color: #666;">🖱️ Scroll to zoom, drag to pan</span>
+            </div>
+            <div class="mermaid-wrapper" id="mermaidWrapper">
+                <div id="mermaidDiagram">
+                    <div style="text-align: center; padding: 2rem; color: #666;">
+                        Click "Start New Session" to begin troubleshooting
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar for Node Details (Right) -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>Node Details</h2>
+                <button class="close-btn" onclick="closeSidebar()">×</button>
+            </div>
+            
+            <!-- Node Info Section -->
+            <div class="node-info" id="nodeInfo">
+                <h3 id="nodeName">Select a node</h3>
+                <div class="node-status-badge" id="nodeStatusBadge">-</div>
+                <p class="node-description" id="nodeDescription">Click on any node in the graph to view its execution details.</p>
+                
+                <div class="node-metadata">
+                    <div class="metadata-item">
+                        <strong>Executor ID:</strong>
+                        <span id="executorId">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Conversation History Section -->
+            <div class="conversation-section" id="conversationSection">
+                <h3>Conversation History <button class="section-toggle" id="conversationToggleBtn" onclick="toggleSection('conversationSection')">−</button></h3>
+                <div class="conversation-container" id="conversationContainer">
+                    <div class="no-conversation" id="noConversation">
+                        No conversation history available for this node.
+                    </div>
+                    <div class="conversation-history" id="conversationHistory" style="display: none;">
+                        <!-- Conversation messages will be inserted here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Execution Result Section -->
+            <div class="result-section" id="resultSection" style="display: none;">
+                <h3>Execution Result <button class="section-toggle" id="resultToggleBtn" onclick="toggleSection('resultSection')">−</button></h3>
+                <div class="result-content" id="resultContent">
+                    <!-- Result will be displayed here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error/Info Messages -->
+    <div class="message-container" id="messageContainer" style="display: none;">
+        <div class="message-content" id="messageContent">
+            <!-- Messages will be displayed here -->
+        </div>
+        <button class="message-close" onclick="closeMessage()">×</button>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+        <div class="loader"></div>
+        <p>Initializing TSG Visualization...</p>
+    </div>
+
+    <!-- Include JavaScript -->
+    <script src="/static/diagram-controller.js"></script>
+    <script src="/static/app.js"></script>
+</body>
+</html>

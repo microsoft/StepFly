@@ -1,0 +1,152 @@
+{
+    "nodes": [
+        {
+            "node": "start",
+            "description": "Begin troubleshooting by collecting incident information and parameters",
+            "input_edges": [],
+            "output_edges": [
+                {"edge": "edge_start_Step1", "condition": "none"}
+            ]
+        },
+        {
+            "node": "Step1",
+            "description": "Collect incident details and extract required parameters for analysis",
+            "input_edges": [
+                {"edge": "edge_start_Step1"}
+            ],
+            "output_edges": [
+                {"edge": "edge_Step1_Step2", "condition": "none"},
+                {"edge": "edge_Step1_Step3", "condition": "none"},
+                {"edge": "edge_Step1_Step4", "condition": "none"},
+                {"edge": "edge_Step1_Step5", "condition": "none"},
+                {"edge": "edge_Step1_Step6", "condition": "none"},
+                {"edge": "edge_Step1_Step7", "condition": "none"},
+                {"edge": "edge_Step1_Step8", "condition": "none"},
+                {"edge": "edge_Step1_Step9", "condition": "none"},
+                {"edge": "edge_Step1_Step10", "condition": "none"}
+            ]
+        },
+        {
+            "node": "Step2",
+            "description": "Check if reliability is dropping compared to previous service version and suggest rollback if regression found",
+            "input_edges": [
+                {"edge": "edge_Step1_Step2"}
+            ],
+            "output_edges": [
+                {"edge": "edge_Step2_end", "condition": "if latest version has >10% higher failure rate (regression found)"},
+                {"edge": "edge_Step2_Step11", "condition": "if no regression or acceptable performance"}
+            ]
+        },
+        {
+            "node": "Step3",
+            "description": "Check if reliability is dropping due to certain feature flag and suggest action if problematic flag found",
+            "input_edges": [
+                {"edge": "edge_Step1_Step3"}
+            ],
+            "output_edges": [
+                {"edge": "edge_Step3_end", "condition": "if feature flag with >8% error rate and >1000 requests found"},
+                {"edge": "edge_Step3_Step11", "condition": "if no feature flag issues"}
+            ]
+        },
+        {
+            "node": "Step4",
+            "description": "Analyze regional availability across all regions and datacenters",
+            "input_edges": [
+                {"edge": "edge_Step1_Step4"}
+            ],
+            "output_edges": [
+                {"edge": "edge_Step4_Step11", "condition": "none"}
+            ]
+        },
+        {
+            "node": "Step5",
+            "description": "Evaluate partition-based availability and identify partitions with biggest reliability drop",
+            "input_edges": [
+                {"edge": "edge_Step1_Step5"}
+            ],
+            "output_edges": [
+                {"edge": "edge_Step5_Step11", "condition": "none"}
+            ]
+        },
+        {
+            "node": "Step6",
+            "description": "Evaluate zone availability and identify zones with infrastructure issues",
+            "input_edges": [
+                {"edge": "edge_Step1_Step6"}
+            ],
+            "output_edges": [
+                {"edge": "edge_Step6_Step11", "condition": "none"}
+            ]
+        },
+        {
+            "node": "Step7",
+            "description": "Evaluate application component availability and identify problematic endpoints",
+            "input_edges": [
+                {"edge": "edge_Step1_Step7"}
+            ],
+            "output_edges": [
+                {"edge": "edge_Step7_Step11", "condition": "none"}
+            ]
+        },
+        {
+            "node": "Step8",
+            "description": "Evaluate product/feature availability and identify customer impact",
+            "input_edges": [
+                {"edge": "edge_Step1_Step8"}
+            ],
+            "output_edges": [
+                {"edge": "edge_Step8_Step11", "condition": "none"}
+            ]
+        },
+        {
+            "node": "Step9",
+            "description": "Evaluate critical business scenarios and workflow completion rates",
+            "input_edges": [
+                {"edge": "edge_Step1_Step9"}
+            ],
+            "output_edges": [
+                {"edge": "edge_Step9_end", "condition": "if CRITICAL business scenario failing (CRITICAL_SCENARIO_FAILING status found)"},
+                {"edge": "edge_Step9_Step11", "condition": "if no critical scenario failures"}
+            ]
+        },
+        {
+            "node": "Step10",
+            "description": "Identify top exceptions and error patterns affecting system reliability",
+            "input_edges": [
+                {"edge": "edge_Step1_Step10"}
+            ],
+            "output_edges": [
+                {"edge": "edge_Step10_Step11", "condition": "none"}
+            ]
+        },
+        {
+            "node": "Step11",
+            "description": "Consolidate findings from all analyses and create comprehensive action plan",
+            "input_edges": [
+                {"edge": "edge_Step2_Step11"},
+                {"edge": "edge_Step3_Step11"},
+                {"edge": "edge_Step4_Step11"},
+                {"edge": "edge_Step5_Step11"},
+                {"edge": "edge_Step6_Step11"},
+                {"edge": "edge_Step7_Step11"},
+                {"edge": "edge_Step8_Step11"},
+                {"edge": "edge_Step9_Step11"},
+                {"edge": "edge_Step10_Step11"}
+            ],
+            "output_edges": [
+                {"edge": "edge_Step11_end", "condition": "none"}
+            ]
+        },
+        {
+            "node": "end",
+            "description": "End of troubleshooting process with action plan",
+            "input_edges": [
+                {"edge": "edge_Step2_end"},
+                {"edge": "edge_Step3_end"},
+                {"edge": "edge_Step9_end"},
+                {"edge": "edge_Step11_end"}
+            ],
+            "output_edges": []
+        }
+    ]
+}
