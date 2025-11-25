@@ -29,7 +29,7 @@ pymongo==4.11.3
 pymongoarrow==1.10.0
 python-dateutil==2.9.0.post0
 python-engineio==4.8.2
-python-socketio==5.11.2
+python-socketio==5.14.0
 pytz==2025.1
 requests==2.32.3
 rich==13.9.4
