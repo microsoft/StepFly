@@ -190,9 +190,7 @@ To create a new troubleshooting guide, follow this guide: [Creating Custom TSGs]
 
 ## 📚 Citation
 
-Our paper "StepFly: Agentic Troubleshooting Guide Automation for Incident Diagnosis" is currently under review.
-
-If you use StepFly in your research, please cite:
+If you use [StepFly](https://arxiv.org/abs/2510.10074) in your research, please cite:
 
 ```
 @misc{stepfly2025,
