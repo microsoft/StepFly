@@ -73,7 +73,7 @@ Before running StepFly, you need to configure your LLM API and MongoDB connectio
 
 #### Configure LLM API
 
-Configure in the configuration file:
+Configure in the [configuration file](./config/config.json):
 
 ```bash
 # Configure in config/config.json
@@ -154,7 +154,7 @@ This demo demonstrates how StepFly diagnoses a critical API gateway incident whe
 
 The troubleshooting process systematically checks service versions, feature flags, regional health, partitions, components, products, and finally discovers the critical workflow failure through business scenario analysis.
 
-**Setup**: First generate the demo database following instructions in `demo_data/README.md`:
+**Setup**: First generate the demo database following instructions in [`demo_data/README.md`](./demo_data/README.md):
 ```bash
 python demo_data/generate_distributed_system_data.py
 ```
@@ -175,11 +175,10 @@ python run_web.py
 
 For demo purposes, the mapping between incident IDs and TSGs is pre-configured in `config/incident_tsg_map.json`. The PlanDAGs for different TSGs are stored in `TSGs/PlanDAGs/`. We provide two versions of the same TSG: one for running in series and one for parallel execution. The default is the parallel version, and you can change it in the mapping file if needed. You can tune `max_executor_number` in `config/config.json` to control parallelism.
 
-#### Annimation of the DAG execution:
+#### Animation of the DAG execution:
 
 <picture>
-  <source srcset="asset/stepfly.gif">
-  <img src="asset/stepfly.gif" width="400" height="200" alt="Description of my image">
+  <img src="asset/stepfly.gif" width="400" height="200" alt="StepFly DAG execution animation">
 </picture>
 
 #### Watch the full demo here:
