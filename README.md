@@ -200,13 +200,11 @@ To create a new troubleshooting guide, follow this guide: [Creating Custom TSGs]
 If you use [StepFly](https://arxiv.org/abs/2510.10074) in your research, please cite:
 
 ```
-@misc{stepfly2025,
-      title={Agentic Troubleshooting Guide Automation for Incident Management}, 
+@misc{stepfly_fse26,
+      title={StepFly: Agentic Troubleshooting Guide Automation for Incident Diagnosis}, 
       author={Jiayi Mao and Liqun Li and Yanjie Gao and Zegang Peng and Shilin He and Chaoyun Zhang and Si Qin and Samia Khalid and Qingwei Lin and Saravan Rajmohan and Sitaram Lanka and Dongmei Zhang},
-      year={2025},
-      eprint={2510.10074},
-      archivePrefix={arXiv},
-      url={https://arxiv.org/abs/2510.10074}, 
+      series={FSE '26},
+      year={2026}
 }
 ```
 
